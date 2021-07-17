@@ -12,11 +12,11 @@ if [ $# -ne 1 ]; then
     exit
 fi
 
-if [ $1 == "bluemoon" ]; then
+if [ ${1^^} == "BLUEMOON" ]; then
     PORT=64001
     STATION=BLUEMOON
     RADIO=192.168.42.144
-elif [ $1 == "reddwarf" ] ; then
+elif [ ${1^^} == "REDDWARF" ] ; then
     PORT=64002
     STATION=REDDWARF
     RADIO=192.168.42.119
@@ -28,6 +28,7 @@ fi
 chmod +x $DAX_DIR/$DAX_PROG
 
 #Start nDAX, nCAT and WSJT-X
-tmux new-session -d -s $1 -n "$STATION-DAX" "$DAX_DIR/$DAX_PROG -station $1 -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
+STATION=${STATION^^}
+tmux new-session -d -s $STATION -n "$STATION-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
 tmux new-window -d -n "$STATION-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen :4532 -radio $RADIO"
 tmux new-window -d -n "$STATION-WSJTX" "wsjtx -r $STATION"
