@@ -5,18 +5,18 @@ CAT_PROG=nCAT-linux-amd64
 DAX_DIR=/home/$USER/Flexradio
 PROG=${DAX_PROG:0:15}
 
-if [ $# -ne 1]; then
+if [ $# -ne 1 ]; then
     echo "Usage: $0 <radio_name>"
     echo "Current Radio options:"
     echo "bluemoon, reddwarf"
     exit
 fi
 
-if [ $1 == "bluemoon"]; then
+if [ $1 == "bluemoon" ]; then
     PORT=64001
     STATION=BLUEMOON
     RADIO=192.168.42.144
-elif [ $1 == "reddwarf"]; then
+elif [ $1 == "reddwarf" ] ; then
     PORT=64002
     STATION=REDDWARF
     RADIO=192.168.42.119
