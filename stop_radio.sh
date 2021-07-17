@@ -8,6 +8,7 @@ tmux list-panes -st ${1^^} -F '#{session_name}:#{window_index}' | xargs -I WINDO
 
 #Cleanup for failed startup
 sleep 5
-pkill nDAX
-pkill nCAT
-pkill pulseaudio
+#Need to only kill the following if they are related to the session's STATION name
+#pkill nDAX
+#pkill nCAT
+#pkill pulseaudio
