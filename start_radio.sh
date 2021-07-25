@@ -8,23 +8,23 @@ WSJTX=/usr/local/bin/wsjtx
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <STATION>"
-    echo "Current Radio options:"
-    echo "BLUEMOON, REDDWARF"
+    echo "Current Radio STATION options:"
+    echo "RDX6500, RDX6600"
     echo "Scripts are case sensitive so make sure you enter the station name exactly as displayed in SmartSDR."
     exit
 fi
 
 #Some example configs
-if [ ${1^^} == "BLUEMOON" ]; then
+if [ ${1^^} == "RDX6500" ]; then
     PORT=64001
     CAT_PORT=:4532
-    STATION=BLUEMOON
-    RADIO=192.168.42.144
-elif [ ${1^^} == "REDDWARF" ] ; then
+    STATION=${1^^}
+    RADIO=192.168.42.165
+elif [ ${1^^} == "RDX6600" ] ; then
     PORT=64002
     CAT_PORT=:4533
-    STATION=REDDWARF
-    RADIO=192.168.42.119
+    STATION=${1^^}
+    RADIO=192.168.42.166
 else
     echo "Unknown Radio"
     exit
@@ -41,6 +41,7 @@ if [ $(tmux ls | grep -c "${STATION^^}") -gt 0 ]; then
 fi
 
 #Start nDAX, nCAT and WSJT-X
-tmux new-session -d -s ${STATION^^} -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
+tmux start-server
+tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
 tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
 tmux new-window -d -n "${STATION^^}-WSJTX" "$WSJTX -r $STATION"
