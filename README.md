@@ -46,3 +46,11 @@ as you do the following:
  3. nDAX and nCAT run on a Linux platform
  4. Radio decoder software, e.g. WSJT-X will have to run on the Linux platform inorder to access the
    CAT and Audio ports provided bu nCAT and nDAX.
+
+## Automate the changing of the SmartSDR STATION name
+
+I have created a couple of basic windows batch files which can be used to automate the renaming of a radio's STATION name
+by using copies of %APPDATA%\FlexRadio Systems\SSDR.settings that are setup with the Radios name and serial number
+etc...
+
+See StartSDR_RDX6500.bat and StartSSDR_RDX6600.bat
