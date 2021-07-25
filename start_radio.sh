@@ -4,7 +4,7 @@
 DAX_PROG=nDAX-linux-amd64
 CAT_PROG=nCAT-linux-amd64
 DAX_DIR=/home/$USER/Flexradio
-WSJTX=/usr/local/bin/wsjtx
+WSJTX=/usr/bin/wsjtx
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <STATION>"
