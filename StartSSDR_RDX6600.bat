@@ -3,4 +3,4 @@
 
 copy "%APPDATA%\FlexRadio Systems\SSDR.settings" "%APPDATA%\FlexRadio Systems\SSDR_Orig.settings"
 copy "%APPDATA%\FlexRadio Systems\SSDR_RDX6500.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
-start "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v3.2.39\SmartSDR.exe"
+start "RDX6600" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v3.2.39\SmartSDR.exe"
