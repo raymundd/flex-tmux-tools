@@ -4,12 +4,12 @@ A bunch of example scripts to use tmux with nCAT and nDAX and Multiple instances
 
 These scripts are just wrappers for the following programs:
 
-Name : Installation source
-tmux : (RH/CentOS/Rocky/Alma) dnf install tmux
-nCAT : Available on GITHUB repository "kc2g-flex-tools"
-nDAX : Available on GITHUB repository "kc2g-flex-tools"
-WSJTX : Available from "www.physics.pronceton.edu/pulsar/k1jt/wsjtx.html"
-SmartSDR : Available when you own a FlexRadio from FlexRadio.
+- Name : Installation source
+- tmux : (RH/CentOS/Rocky/Alma) dnf install tmux
+- nCAT : Available on GITHUB repository "kc2g-flex-tools"
+- nDAX : Available on GITHUB repository "kc2g-flex-tools"
+- WSJTX : Available from "www.physics.pronceton.edu/pulsar/k1jt/wsjtx.html"
+- SmartSDR : Available when you own a FlexRadio from FlexRadio.
 
 ## Firewall
 
@@ -18,13 +18,13 @@ machine running nCAT and nDAX, otherwise you can ignore this bit.
 
 The following ports need to be opened on the host machine:
 
-4992/udp, 4992/tcp, 64001/udp, 64002/udp
+    4992/udp, 4992/tcp, 64001/udp, 64002/udp
 
 e.g. on RedHat based Linux...
-firewall-cmd --add-port 4992/udp && firewall-cmd --permanent --add-port 4992/udp
-firewall-cmd --add-port 4992/tcp && firewall-cmd --permanent --add-port 4992/tcp
-firewall-cmd --add-port 64001/udp && firewall-cmd --permanent --add-port 64001/udp
-firewall-cmd --add-port 64002/udp && firewall-cmd --permanent --add-port 64002/udp
+    firewall-cmd --add-port 4992/udp && firewall-cmd --permanent --add-port 4992/udp
+    firewall-cmd --add-port 4992/tcp && firewall-cmd --permanent --add-port 4992/tcp
+    firewall-cmd --add-port 64001/udp && firewall-cmd --permanent --add-port 64001/udp
+    firewall-cmd --add-port 64002/udp && firewall-cmd --permanent --add-port 64002/udp
 
 ## Installing the scripts
 
@@ -37,9 +37,9 @@ These scripts assume that the Radio station name is all Uppercase:
 The station IP, CAT nad DAX ports are currently hardcoded into the scripts - so you will need to check/change these based
 on your network setup.
 
-start_radio.sh <STATION_NAME>
+    start_radio.sh <STATION_NAME>
 
-stop_radio.sh <STATION_NAME>
+    stop_radio.sh <STATION_NAME>
 
 ## Running Multiple instances of SmartSDR with different STATION names on a single machine
 
@@ -55,23 +55,21 @@ Multiple instances of SmartSDR can be run but the operator will need to change t
 
 ### Linux to the rescue
 
-However there is a way to get multiple instances of DAX and CAT running on a single machine by using **https://github.com/kc2g-flex-tools** written by **https://github.com/arodland**.
+However there is a way to get multiple instances of DAX and CAT running on a single machine by using **[kc2g-flex-tools](https://github.com/kc2g-flex-tools)** written by **[arodland](https://github.com/arodland)**.
 
 In that repository you will find the nCAT and nDAX utlities. These are written for Linux and they support running multiple instances attached to multiple instances of SmartSDR. The instances of SmartSDR can be running on the same windows platform provided you undertake a few extra steps to set things up.
 
 #### The following notes assume the following
 
- a. You have a Windows platform already with SmartSDR available and can control your FlexRadio(s) already using all the FlexRadio tools.
-    This can be Windows running on a pyhsical machine or as a guest in a Virtual Machine.
- b. You have a Linux platform available, this could be a Virtual Machine running as a guest OS on the physical Windows platform,
-    or You could have Linux running on a physical platform with a guest Windows Virtual machine to run SmartSDR.
- c. You know how to manipulate files in windows.
- d. %APPDATA% is set (usually by default to "C:\Users\<USERNAME>\AppData\Roaming")
- e. %APPDATA% is not hidden, if using Windows FileExplorer, you hopefully know how to make hidden items visble.
+- You have a Windows platform already with SmartSDR available and can control your FlexRadio(s) already using all the FlexRadio tools. This can be Windows running on a pyhsical machine or as a guest in a Virtual Machine.
+- You have a Linux platform available, this could be a Virtual Machine running as a guest OS on the physical Windows platform, or You could have Linux running on a physical platform with a guest Windows Virtual machine to run SmartSDR.
+- You know how to manipulate files in windows.
+- %APPDATA% is set (usually by default to "C:\Users\<USERNAME>\AppData\Roaming")
+- %APPDATA% is not hidden, if using Windows FileExplorer, you hopefully know how to make hidden items visble.
 
 ### Getting things ready
 
- 1. Follow the information at **https://github.com/kc2g-flex-tools** to install and the basic use of the nCAT and nDAX utilities.
+ 1. Follow the information at **[kc2g-flex-tools](https://github.com/kc2g-flex-tools)** to install and the basic use of the nCAT and nDAX utilities.
  2. When the SmartSDR instances are running, manually set the "STATION:" name to be unique on each SmartSDR instance.
  3. Use the unique STATION names, as set in step (2), to run the nDAX and nCAT by altering the start and stop scripts in this repository to match.
  4. Radio demod/decoder software, e.g. WSJT-X will have to run on the Linux platform so that it can access the CAT and Audio ports provided by nCAT and nDAX.
@@ -101,10 +99,10 @@ Here is a basic cmd.exe script example:
 
 This script can be run in cmd.exe or as a .bat file, it copies one of the pre-saved version of the settings file into place and then starts the SmartSDR.
 
-copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RDX6500.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
-start "RDX6500" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
+    copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RDX6500.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
+    start "RDX6500" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
 
-See StartSDR_RDX6500.bat and StartSSDR_RDX6600.bat files for more examples.
+> See StartSDR_RDX6500.bat and StartSSDR_RDX6600.bat files for more examples.
 
 R.G.Delaforce
 G6UJB
