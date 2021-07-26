@@ -21,6 +21,7 @@ The following ports need to be opened on the host machine:
     4992/udp, 4992/tcp, 64001/udp, 64002/udp
 
 e.g. on RedHat based Linux...
+
     firewall-cmd --add-port 4992/udp && firewall-cmd --permanent --add-port 4992/udp
     firewall-cmd --add-port 4992/tcp && firewall-cmd --permanent --add-port 4992/tcp
     firewall-cmd --add-port 64001/udp && firewall-cmd --permanent --add-port 64001/udp
