@@ -81,6 +81,8 @@ In that repository you will find the nCAT and nDAX utlities. These are written f
 
 When SmartSDR launches it gets parameters from the file %APPDATA%\FlexRadio Systems\SSDR.settings, this defines many things which includes the last known STATION name and radio serial number. By making use of multiple copies of this file it is possible to force the STATION name each time that SmartSDR launches to a pre-determined name for each instance.
 
+> **Please be aware that this is not a perfect solution, it works in my situation.**
+
 ### Getting things setup
 
 1. Start an instance of SmartSDR and connect to your first FlexRadio.
@@ -112,7 +114,7 @@ To start the next instance of SmartSDR but with the other STATION name, just cha
 
 ### PLEASE BE AWARE
 
-> This method is not perfect because any changes you make to SmartSDR will be overwritten then next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes for a particular instance.
+> This method is not perfect because any changes you make to SmartSDR will be overwritten the next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes for a particular instance.
 
 R.G.Delaforce
 G6UJB
