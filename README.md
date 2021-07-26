@@ -106,11 +106,13 @@ To start the next instance of SmartSDR but with the other STATION name, just cha
     copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RADIO_2.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
     start "RADIO_2" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
 
-This method is not perfect because any changes you make to SmartSDR will be overwritten then next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes.
-
 ## My Example script files
 
 > See StartSDR_RDX6500.bat and StartSSDR_RDX6600.bat files for more examples.
+
+### PLEASE BE AWARE
+
+> This method is not perfect because any changes you make to SmartSDR will be overwritten then next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes for a particular instance.
 
 R.G.Delaforce
 G6UJB
