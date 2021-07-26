@@ -81,16 +81,16 @@ In that repository you will find the nCAT and nDAX utlities. These are written f
 
 When SmartSDR launches it gets parameters from the file %APPDATA%\FlexRadio Systems\SSDR.settings, this defines many things which includes the last known STATION name and radio serial number. By making use of multiple copies of this file it is possible to force the STATION name each time that SmartSDR launches to a pre-determined name for each instance.
 
-> **Please be aware that this is not a perfect solution, it works in my situation.**
+> **Please be aware that this is not a perfect solution, it works for my situation.**
 
 ### Getting things setup
 
 1. Start an instance of SmartSDR and connect to your first FlexRadio.
-2. Set the STATION name by double clicking the textbox near the **"STATION:"** label located at lower middle of the main window, press "Enter" when name is complete.
-3. Under the SmartSDR settings menu, disable the options "Autostart CAT with SmartSDR" and "Autostart DAX with SmartSDR". (Assuming you are going to use nCAT and nDAX).
-4. Exit the running SmartSDR - this is necessary to ensure settings are writted back to persistent storage.
-5. Using your favourite windows file manager, copy the file **%APPDATA%\FlexRadio Systems\SSDR.settings** to a file with a different name, you could use the STATION name as a tag, e.g.. **%APPDATA%\FlexRadio Systems\SSDR_RADIO_1.settings**.
-6. Start SmartSDR again and connect to your other FlexRadio, set the STATION: name to a different name to the first, again make any changes you need to this instance and disable "Autostart CAT with SmartSDR" and "Autostart DAX with SmartSDR" as required.
+2. Set the STATION name by double clicking the textbox near the **"STATION:"** label located at lower middle of the main window, press "Enter" when name is complete. e.g. **RADIO_1**
+3. Under the SmartSDR settings menu, disable the options "Autostart CAT with SmartSDR" and "Autostart DAX with SmartSDR". (Only do this if you are going to use nCAT and nDAX).
+4. Exit the running SmartSDR - this is necessary to ensure settings are written back to persistent storage.
+5. Using your favourite file manager, copy the file **%APPDATA%\FlexRadio Systems\SSDR.settings** to a file with a different name, you could use the STATION name as a tag, e.g.. **%APPDATA%\FlexRadio Systems\SSDR_RADIO_1.settings**.
+6. Start SmartSDR again and connect to your other FlexRadio, set the STATION: name to a different name to the first, again make any changes you need to this instance as required, see step 3.
 7. Exit this instance of SmartSDR.
 8. Make another copy of **%APPDATA%\FlexRadio Systems\SSDR.settings** to another file with a unique name in same way as step 5, e.g. **%APPDATA%\FlexRadio Systems\SSDR_RADIO_2.settings**.
 
@@ -114,7 +114,12 @@ To start the next instance of SmartSDR but with the other STATION name, just cha
 
 ### PLEASE BE AWARE
 
+> ANY CHANGES TO THE SSDR.SETTINGS FILE THAT ARE NOT APPLIED BY THE SMARTSDR PROGRAM MAY RESULT INCORRECT/UNDESIRED OPERATION OF THE SMARTSDR SOFTWARE PACKAGE OR THE RADIO, IF YOU ARE COMFORTABLE MAKING THESE CHANGES AND UNDERSTAND THE RISKS THEN PLEASE ENJOY THIS INFORMATION, OTHERWISE IT MAY BE SAFER FOR YOU TO WAIT FOR FLEXRADIO SYSTEMS TO REALISE THAT THIS WOULD BE A REALLY USEFUL ADDITION TO THEIR PROVIDED SOFTWARE PACKAGES, ALL CHANGES MADE ARE AT YOUR OWN RISK.
 > This method is not perfect because any changes you make to SmartSDR will be overwritten the next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes for a particular instance.
+
+### Alternative method
+
+I am researching an alternative solution that simply makes minor changes to the relevant parameters in the SSDR.settings file when launched and not to do a wholesale replacement.
 
 R.G.Delaforce
 G6UJB
