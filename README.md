@@ -87,21 +87,28 @@ When SmartSDR launches it gets parameters from the file %APPDATA%\FlexRadio Syst
 2. Set the STATION name by double clicking the textbox near the **"STATION:"** label located at lower middle of the main window, press "Enter" when name is complete.
 3. Under the SmartSDR settings menu, disable the options "Autostart CAT with SmartSDR" and "Autostart DAX with SmartSDR". (Assuming you are going to use nCAT and nDAX).
 4. Exit the running SmartSDR - this is necessary to ensure settings are writted back to persistent storage.
-5. Using your favourite windows file manager, copy the file **%APPDATA%\FlexRadio Systems\SSDR.settings** to a file with a different name, e.g. use the STATION name as a tag, i.e. %APPDATA%\FlexRadio Systems\SSDR_RDX6500.settings.
+5. Using your favourite windows file manager, copy the file **%APPDATA%\FlexRadio Systems\SSDR.settings** to a file with a different name, you could use the STATION name as a tag, e.g.. **%APPDATA%\FlexRadio Systems\SSDR_RADIO_1.settings**.
 6. Start SmartSDR again and connect to your other FlexRadio, set the STATION: name to a different name to the first, again make any changes you need to this instance and disable "Autostart CAT with SmartSDR" and "Autostart DAX with SmartSDR" as required.
 7. Exit this instance of SmartSDR.
-8. Make another copy of **%APPDATA%\FlexRadio Systems\SSDR.settings** to another file with a unique name in same way as step 5.
+8. Make another copy of **%APPDATA%\FlexRadio Systems\SSDR.settings** to another file with a unique name in same way as step 5, e.g. **%APPDATA%\FlexRadio Systems\SSDR_RADIO_2.settings**.
 
 ## Switching the SmartSDR STATION name
 
 Now changing the STATION name to alternative pre-determined named can be achieved by just copying the settings file with the STATION name you want back as %APPDATA%\FlexRadio Systems\SSDR.settings.
 
-Here is a basic cmd.exe script example:
+Here is a basic cmd.exe script example, it copies one of the pre-saved version of the settings file into place and then starts the SmartSDR.
 
-This script can be run in cmd.exe or as a .bat file, it copies one of the pre-saved version of the settings file into place and then starts the SmartSDR.
+    copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RADIO_1.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
+    start "RADIO_1" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
 
-    copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RDX6500.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
-    start "RDX6500" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
+To start the next instance of SmartSDR but with the other STATION name, just change the settings file that is copied over SSDR.settings.
+
+    copy /Y "%APPDATA%\FlexRadio Systems\SSDR_RADIO_2.settings" "%APPDATA%\FlexRadio Systems\SSDR.settings"
+    start "RADIO_2" "%PROGRAMFILES%\FlexRadio Systems\SmartSDR v2.7.6\SmartSDR.exe"
+
+This method is not perfect because any changes you make to SmartSDR will be overwritten then next time you run this script so, you must remember to re-save the SSDR.settings file to your uniquely named file if you need to retain the changes.
+
+## My Example script files
 
 > See StartSDR_RDX6500.bat and StartSSDR_RDX6600.bat files for more examples.
 
