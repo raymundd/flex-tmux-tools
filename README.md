@@ -77,6 +77,10 @@ In that repository you will find the nCAT and nDAX utlities. These are written f
 
 ## Starting multiple instances of SmartSDR with a pre-determined unique STATION name
 
+These notes are here just so that you can see that this is a step in the process.
+
+> Latest version of the code can be found at https://github.com/raymundd/g6ujb-multi-smartsdr
+
 ### Background
 
 When SmartSDR launches it gets parameters from the file %APPDATA%\FlexRadio Systems\SSDR.settings, this defines many things which includes the last known STATION name and radio serial number. By making use of multiple copies of this file it is possible to force the STATION name each time that SmartSDR launches to a pre-determined name for each instance.
