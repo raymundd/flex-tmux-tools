@@ -56,8 +56,61 @@ if [ $(tmux ls | grep -c "${STATION^^}") -gt 0 ]; then
     exit
 fi
 
+# Create a launch script
+cat <<EOF > /tmp/wsjtx.sh
+#!/bin/bash
+${WSJTX} -r ${STATION}&
+PROC1=\$!
+echo \$PROC1 > /tmp/${STATION}.pid
+wait \$PROC1
+echo "WSJT - FINISHED"
+EOF
+
+# Prepare the launch script and pid file
+chmod +x /tmp/wsjtx.sh
+rm /tmp/${STATION}.pid
+
 #Start nDAX, nCAT and WSJT-X
 tmux start-server
 tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
 tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
-tmux new-window -d -n "${STATION^^}-WSJTX" "$WSJTX -r $STATION"
+tmux new-window -d -n "${STATION^^}-WSJTX" /tmp/wsjtx.sh
+
+# Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
+# Wait for the pid file to be created.
+loop=0
+while [ ! -e /tmp/${STATION}.pid ]; do
+        sleep 1
+        ((loop++))
+        if [ $loop -gt 10 ]; then
+                echo "ERROR - Process has failed."
+        fi
+done
+
+WSJTX_P=$(cat /tmp/${STATION}.pid)
+echo $WSJTX_P
+
+# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
+spin='-\|/'
+i=0
+while [[ $(ps --no-headers -p $WSJTX_P) ]]
+do
+	# wait for it to finish
+    	i=$(( (i+1) %4 ))
+		printf "\rINFO: Running ${spin:$i:1}"
+  		sleep .5
+done
+
+echo
+
+#TODO - Clear down the tmux session for this instance.
+rm /tmp/wsjtx.sh
+rm /tmp/${STATION}.pid
+#Send CTRL-C to all panes.
+tmux list-panes -st ${STATION^^} -F '#{session_name}:#{window_index}' | xargs -I WINDOW tmux send-keys -t WINDOW C-c
+
+#Cleanup for failed startup
+sleep 5
+#Need to only kill the following if they are related to the session's STATION name
+pkill -f "^[^tmux].*nDAX.*${STATION}"
+pkill -f "^[^tmux].*nCAT.*${STATION}"
