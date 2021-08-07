@@ -106,3 +106,11 @@ echo
 #TODO - Clear down the tmux session for this instance.
 rm /tmp/wsjtx.sh
 rm /tmp/${STATION}.pid
+#Send CTRL-C to all panes.
+tmux list-panes -st ${STATION^^} -F '#{session_name}:#{window_index}' | xargs -I WINDOW tmux send-keys -t WINDOW C-c
+
+#Cleanup for failed startup
+sleep 5
+#Need to only kill the following if they are related to the session's STATION name
+pkill -f "^[^tmux].*nDAX.*${STATION}"
+pkill -f "^[^tmux].*nCAT.*${STATION}"
