@@ -59,5 +59,36 @@ fi
 #Start nDAX, nCAT and WSJT-X
 tmux start-server
 tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
+# Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
+PROC=$!
+
 tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
 tmux new-window -d -n "${STATION^^}-WSJTX" "$WSJTX -r $STATION"
+
+# Using the BASH sessions PID locate the PID of SmartSDR.exe, or bail.
+for pid in "$(pgrep --parent $PROC)"
+do
+	echo $pid
+	if [[ -n $pid ]] && [[ $(ps --no-headers -fp $pid | egrep -c ".+wsjtx.exe") -eq 1 ]]
+	then
+		WSJTX_P=$pid
+		break
+	else
+		echo "ERROR: WSJTX.exe not running."
+		echo
+		exit 1
+	fi
+done
+
+# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
+spin='-\|/'
+i=0
+while [[ $(ps --no-headers -p $WSJTX_P) ]]
+do
+	# wait for it to finish
+    	i=$(( (i+1) %4 ))
+		printf "\rINFO: Running ${spin:$i:1}"
+  		sleep .5
+done
+
+echo
