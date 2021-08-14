@@ -109,6 +109,7 @@ do
 done
 
 echo
+echo "Stopping..."
 
 # Clear down the tmux session for this instance.
 rm $TEMP_SCRIPT
