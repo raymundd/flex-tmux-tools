@@ -38,9 +38,12 @@ These scripts assume that the Radio station name is all Uppercase:
 The station IP, CAT nad DAX ports are currently hardcoded into the scripts - so you will need to check/change these based
 on your network setup.
 
-    start_radio.sh <STATION_NAME>
+    start_wsjtx.sh <STATION_NAME>
 
-    stop_radio.sh <STATION_NAME>
+## Installing Gnome Application Launch Icon
+To create a launch Icon in the Activities menu.
+
+    cp share/applications/WSJTX* ~/.local/share/applications/.
 
 ## Running Multiple instances of SmartSDR with different STATION names on a single machine
 
