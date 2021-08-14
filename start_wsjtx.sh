@@ -74,21 +74,25 @@ EOF
 chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
-tmux start-server
-tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
+tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
+                    -radio $RADIO -source $STATION.rx -sink $STATION.tx"
 tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
 tmux new-window -d -n "${STATION^^}-WSJTX" $TEMP_SCRIPT
 
 # Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
 # Wait for the pid file to be created.
 loop=0
-while [ ! -e ${PID_FILE} ]; do
+while [ ! -s ${PID_FILE} ]; do
         sleep 1
         ((loop++))
+        echo -n .
         if [ $loop -gt 10 ]; then
                 echo "ERROR - Process has failed."
+                exit 1
         fi
 done
+
+echo
 
 # Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
 WSJTX_P=$(cat ${PID_FILE})
