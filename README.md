@@ -40,7 +40,7 @@ on your network setup.
 
     start_wsjtx.sh <STATION_NAME>
 
-##Installing Gnome Application Launch Icon
+## Installing Gnome Application Launch Icon
 To create a launch Icon in the Activities menu.
 
     cp share/applications/WSJTX* ~/.local/share/applications/.
