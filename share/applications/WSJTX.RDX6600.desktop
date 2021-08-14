@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=WSJTX-RDX6600
+Comment=DAX and CAT tool
+Exec=/home/raymundd/Flexradio/g6ujb-flex-tools-beta_0.3/start_wsjtx.sh RDX6600
+Icon=wsjtx_icon
+Terminal=true
+X-MultipleArgs=false
+Type=Application
+Categories=AudioVideo;Audio;HamRadio;
+StartupNotify=true
