@@ -56,30 +56,33 @@ if [ $(tmux ls | grep -c "${STATION^^}") -gt 0 ]; then
     exit
 fi
 
-# Create a launch script
-cat <<EOF > /tmp/wsjtx.sh
+# Use randomized unique filenames for each instance of run.
+TEMP_SCRIPT=$(mktemp /tmp/${STATION}.XXXXXXXX.sh)
+PID_FILE=$(mktemp /tmp/${STATION}.XXXXXXXX.pid)
+
+# Create temporary runtime script to allow us to get the PID of WSJT.
+cat <<EOF > $TEMP_SCRIPT
 #!/bin/bash
 ${WSJTX} -r ${STATION}&
 PROC1=\$!
-echo \$PROC1 > /tmp/${STATION}.pid
+echo \$PROC1 > ${PID_FILE}
 wait \$PROC1
 echo "WSJT - FINISHED"
 EOF
 
-# Prepare the launch script and pid file
-chmod +x /tmp/wsjtx.sh
-rm /tmp/${STATION}.pid
+# Prepare the launch script
+chmod +x $TEMP_SCRIPT
 
-#Start nDAX, nCAT and WSJT-X
+# Start tmux, nDAX, nCAT and WSJT-X
 tmux start-server
 tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT -radio $RADIO -source $STATION.rx -sink $STATION.tx"
 tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
-tmux new-window -d -n "${STATION^^}-WSJTX" /tmp/wsjtx.sh
+tmux new-window -d -n "${STATION^^}-WSJTX" $TEMP_SCRIPT
 
 # Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
 # Wait for the pid file to be created.
 loop=0
-while [ ! -e /tmp/${STATION}.pid ]; do
+while [ ! -e ${PID_FILE} ]; do
         sleep 1
         ((loop++))
         if [ $loop -gt 10 ]; then
@@ -87,10 +90,10 @@ while [ ! -e /tmp/${STATION}.pid ]; do
         fi
 done
 
-WSJTX_P=$(cat /tmp/${STATION}.pid)
+# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
+WSJTX_P=$(cat ${PID_FILE})
 echo $WSJTX_P
 
-# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
 spin='-\|/'
 i=0
 while [[ $(ps --no-headers -p $WSJTX_P) ]]
@@ -103,14 +106,14 @@ done
 
 echo
 
-#TODO - Clear down the tmux session for this instance.
-rm /tmp/wsjtx.sh
-rm /tmp/${STATION}.pid
-#Send CTRL-C to all panes.
+# Clear down the tmux session for this instance.
+rm $TEMP_SCRIPT
+rm $PID_FILE
+# Send CTRL-C to all panes.
 tmux list-panes -st ${STATION^^} -F '#{session_name}:#{window_index}' | xargs -I WINDOW tmux send-keys -t WINDOW C-c
 
-#Cleanup for failed startup
+# Cleanup for failed startup
 sleep 5
-#Need to only kill the following if they are related to the session's STATION name
+# Need to only kill the following if they are related to the session's STATION name
 pkill -f "^[^tmux].*nDAX.*${STATION}"
 pkill -f "^[^tmux].*nCAT.*${STATION}"
