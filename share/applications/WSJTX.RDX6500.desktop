@@ -2,9 +2,9 @@
 Version=1.0
 Name=WSJTX-RDX6500
 Comment=DAX and CAT tool
-Exec=/home/raymundd/Flexradio/g6ujb-flex-tools-beta_0.3/start_wsjtx.sh RDX6500
+Exec=gnome-terminal --hide-menubar --geometry 40x6 --title WSJTX-RDX6500 --command "/home/raymundd/Flexradio/g6ujb-flex-tools/start_wsjtx.sh RDX6500"
 Icon=wsjtx_icon
-Terminal=true
+Terminal=false
 X-MultipleArgs=false
 Type=Application
 Categories=AudioVideo;Audio;HamRadio;
