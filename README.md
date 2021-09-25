@@ -41,6 +41,7 @@ on your network setup.
     start_wsjtx.sh <STATION_NAME>
 
 ## Installing Gnome Application Launch Icon
+
 To create a launch Icon in the Activities menu.
 
     cp share/applications/WSJTX* ~/.local/share/applications/.
@@ -82,7 +83,7 @@ In that repository you will find the nCAT and nDAX utlities. These are written f
 
 These notes are here just so that you can see that this is a step in the process.
 
-> Latest version of the code can be found at https://github.com/raymundd/g6ujb-multi-smartsdr
+> Latest version of the code can be found at <https://github.com/raymundd/g6ujb-multi-smartsdr>
 
 ### Background
 
