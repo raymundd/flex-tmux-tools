@@ -63,7 +63,7 @@ PID_FILE=$(mktemp /tmp/${STATION}.XXXXXXXX.pid)
 # Create temporary runtime script to allow us to get the PID of WSJT.
 cat <<EOF > $TEMP_SCRIPT
 #!/bin/bash
-${TOOL} -r ${STATION}&
+${TOOL} --config-dir ${HOME}/Fldigi/${STATION}&
 PROC1=\$!
 echo \$PROC1 > ${PID_FILE}
 wait \$PROC1
