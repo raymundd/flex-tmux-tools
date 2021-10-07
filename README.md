@@ -9,6 +9,7 @@ These scripts are just wrappers for the following programs:
 - nCAT : Available on GITHUB repository "kc2g-flex-tools"
 - nDAX : Available on GITHUB repository "kc2g-flex-tools"
 - WSJTX : Available from "www.physics.pronceton.edu/pulsar/k1jt/wsjtx.html"
+- FLDIGI : Available from http://www.w1hkj.com/files/
 - SmartSDR : Available when you own a FlexRadio from FlexRadio.
 
 ## Firewall
@@ -39,6 +40,7 @@ The station IP, CAT nad DAX ports are currently hardcoded into the scripts - so 
 on your network setup.
 
     start_wsjtx.sh <STATION_NAME>
+    start_fldigi <STATION_NAME>
 
 ## Installing Gnome Application Launch Icon
 
