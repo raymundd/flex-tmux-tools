@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=FLDIGI-RDX6600
+Comment=FLDIGI nDAX nCAT tool chain
+Exec=gnome-terminal --hide-menubar --geometry 40x6 --title FLDIGI-RDX6600 --command "/home/raymundd/Flexradio/g6ujb-flex-tools/start_fldigi.sh RDX6600"
+Icon=fldigi
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Categories=AudioVideo;Audio;HamRadio;
+StartupNotify=true
