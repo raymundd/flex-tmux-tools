@@ -79,7 +79,7 @@ chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
 tmux new-session -s "${STATION^^}-WSJTX" -d -n "${STATION^^}-WSJTX-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source $STATION.rx -sink $STATION.tx -slice $SLICE -daxch =$DAXCH"
+                    -radio $RADIO -source $STATION.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
 tmux new-window -d -n "${STATION^^}-WSJTX-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
                     -slice $SLICE"
 tmux new-window -d -n "${STATION^^}-WSJTX-TOOL" $TEMP_SCRIPT
