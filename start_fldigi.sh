@@ -54,7 +54,7 @@ fi
 chmod +x $DAX_DIR/$DAX_PROG
 chmod +x $DAX_DIR/$CAT_PROG
 
-if [ $(tmux ls | grep -c "${STATION^^}") -gt 0 ]; then
+if [ $(tmux ls | grep -c "${STATION^^}-FL") -gt 0 ]; then
     echo "Session may already be running - abandoning run."
     tmux ls
     exit
@@ -79,7 +79,7 @@ chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
 tmux new-session -s "${STATION^^}-FL" -d -n "${STATION^^}-FL-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source $STATION.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
+                    -radio $RADIO -source $STATION-$SLICE-$DAXCH.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
 tmux new-window -d -n "${STATION^^}-FL-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
                     -slice $SLICE"
 tmux new-window -d -n "${STATION^^}-FL-TOOL" $TEMP_SCRIPT
@@ -120,10 +120,10 @@ echo "Stopping..."
 rm $TEMP_SCRIPT
 rm $PID_FILE
 # Send CTRL-C to all panes.
-tmux list-panes -st ${STATION^^} -F '#{session_name}:#{window_index}' | xargs -I WINDOW tmux send-keys -t WINDOW C-c
+tmux list-panes -st "${STATION^^}-FL" -F '#{session_name}:#{window_index}' | xargs -I WINDOW tmux send-keys -t WINDOW C-c
 
 # Cleanup for failed startup
 sleep 5
 # Need to only kill the following if they are related to the session's STATION name
-pkill -f "^[^tmux].*nDAX.*${STATION}"
-pkill -f "^[^tmux].*nCAT.*${STATION}"
+pkill -f "^[^tmux].*nDAX.*${STATION}-FL"
+pkill -f "^[^tmux].*nCAT.*${STATION}-FL"
