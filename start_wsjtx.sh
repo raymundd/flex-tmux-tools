@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #Locations of programs
+PACTL=/usr/bin/pactl
 DAX_PROG=nDAX-linux-amd64
 CAT_PROG=nCAT-linux-amd64
 DAX_DIR=/home/$USER/Flexradio
@@ -79,7 +80,7 @@ chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
 tmux new-session -s "${STATION^^}-WSJTX" -d -n "${STATION^^}-WSJTX-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source ${STATION}-${SLICE}-${DAXCH}.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
+                    -radio $RADIO -source ${STATION}-${SLICE}-${DAXCH}.rx -sink ${STATION}-${SLICE}-${DAXCH}.tx -slice $SLICE -daxch $DAXCH"
 tmux new-window -d -n "${STATION^^}-WSJTX-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
                     -slice $SLICE"
 tmux new-window -d -n "${STATION^^}-WSJTX-TOOL" $TEMP_SCRIPT
@@ -102,6 +103,11 @@ echo
 # Spinner routine - Lets just show that the script is alive and waiting for tool to exit.
 WSJTX_P=$(cat ${PID_FILE})
 echo $WSJTX_P
+
+# nDAX wants to create the pulseaudio sink for TX - this needs to always be the default sink
+# Need to actually check if a sink device exists - if it does then donot ask for it!
+echo "Setting default TX Audio to this one..."
+${PACTL} set-default-sink "${STATION^^}-${SLICE}-${DAXCH}.tx"
 
 spin='-\|/'
 i=0

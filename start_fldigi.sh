@@ -17,10 +17,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #Locations of programs
+PACTL=/usr/bin/pactl
 DAX_PROG=nDAX-linux-amd64
 CAT_PROG=nCAT-linux-amd64
 DAX_DIR=/home/$USER/Flexradio
 TOOL=/usr/bin/fldigi
+
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <STATION>"
@@ -103,6 +105,11 @@ echo
 # Spinner routine - Lets just show that the script is alive and waiting for tool to exit.
 TOOL_P=$(cat ${PID_FILE})
 echo $TOOL_P
+
+# nDAX wants to create the pulseaudio sink for TX - this needs to always be the default sink
+# Need to actually check if a sink device exists - if it does then donot ask for it!
+echo "Setting default TX Audio to this one..."
+${PACTL} set-default-sink "${STATION^^}-${SLICE}-${DAXCH}.tx"
 
 spin='-\|/'
 i=0
