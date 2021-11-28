@@ -64,7 +64,7 @@ fi
 TEMP_SCRIPT=$(mktemp /tmp/${STATION}.XXXXXXXX.sh)
 PID_FILE=$(mktemp /tmp/${STATION}.XXXXXXXX.pid)
 
-# Create temporary runtime script to allow us to get the PID of WSJT.
+# Create temporary runtime script to allow us to get the PID of tool.
 cat <<EOF > $TEMP_SCRIPT
 #!/bin/bash
 ${WSJTX} -r ${STATION}&
@@ -84,7 +84,7 @@ tmux new-window -d -n "${STATION^^}-WSJTX-CAT" "$DAX_DIR/$CAT_PROG -station $STA
                     -slice $SLICE"
 tmux new-window -d -n "${STATION^^}-WSJTX-TOOL" $TEMP_SCRIPT
 
-# Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
+# Lets remember the pid of this tmux session so that we can find the associated instance of tool that was launched.
 # Wait for the pid file to be created.
 loop=0
 while [ ! -s ${PID_FILE} ]; do
@@ -99,7 +99,7 @@ done
 
 echo
 
-# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
+# Spinner routine - Lets just show that the script is alive and waiting for tool to exit.
 WSJTX_P=$(cat ${PID_FILE})
 echo $WSJTX_P
 
@@ -125,5 +125,5 @@ tmux list-panes -st "${STATION^^}-WSJTX" -F '#{session_name}:#{window_index}' | 
 # Cleanup for failed startup
 sleep 5
 # Need to only kill the following if they are related to the session's STATION name
-pkill -f "^[^tmux].*nDAX.*${STATION}-WSJTX"
-pkill -f "^[^tmux].*nCAT.*${STATION}-WSJTX"
+pkill -f "^[^tmux].*nDAX.*${STATION}-${SLICE}-${DAXCH}"
+pkill -f "^[^tmux].*nCAT.*${STATION}.*slice ${SLICE}"

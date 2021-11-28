@@ -64,7 +64,7 @@ fi
 TEMP_SCRIPT=$(mktemp /tmp/${STATION}.XXXXXXXX.sh)
 PID_FILE=$(mktemp /tmp/${STATION}.XXXXXXXX.pid)
 
-# Create temporary runtime script to allow us to get the PID of WSJT.
+# Create temporary runtime script to allow us to get the PID of tool.
 cat <<EOF > $TEMP_SCRIPT
 #!/bin/bash
 ${TOOL} --config-dir ${HOME}/Fldigi/${STATION}&
@@ -79,12 +79,13 @@ chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
 tmux new-session -s "${STATION^^}-FL" -d -n "${STATION^^}-FL-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source $STATION-$SLICE-$DAXCH.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
+                    -radio $RADIO -source ${STATION}-${SLICE}-${DAXCH}.rx -sink ${STATION}-${SLICE}-${DAXCH}.tx \
+                    -slice $SLICE -daxch $DAXCH"
 tmux new-window -d -n "${STATION^^}-FL-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
                     -slice $SLICE"
 tmux new-window -d -n "${STATION^^}-FL-TOOL" $TEMP_SCRIPT
 
-# Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
+# Lets remember the pid of this tmux session so that we can find the associated instance of tool that was launched.
 # Wait for the pid file to be created.
 loop=0
 while [ ! -s ${PID_FILE} ]; do
@@ -99,7 +100,7 @@ done
 
 echo
 
-# Spinner routine - Lets just show that the script is alive and waiting for SmartSDR.exe to exit.
+# Spinner routine - Lets just show that the script is alive and waiting for tool to exit.
 TOOL_P=$(cat ${PID_FILE})
 echo $TOOL_P
 
@@ -124,6 +125,6 @@ tmux list-panes -st "${STATION^^}-FL" -F '#{session_name}:#{window_index}' | xar
 
 # Cleanup for failed startup
 sleep 5
-# Need to only kill the following if they are related to the session's STATION name
-pkill -f "^[^tmux].*nDAX.*${STATION}-FL"
-pkill -f "^[^tmux].*nCAT.*${STATION}-FL"
+# Need to only kill the following if they are related to the session's STATION SLICE and DAXCH name
+pkill -f "^[^tmux].*nDAX.*${STATION}-${SLICE}-${DAXCH}"
+pkill -f "^[^tmux].*nCAT.*${STATION}.*slice ${SLICE}"
