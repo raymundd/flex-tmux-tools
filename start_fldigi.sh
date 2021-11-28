@@ -32,11 +32,15 @@ fi
 
 #Some example configs
 if [ ${1^^} == "RDX6500" ]; then
+    SLICE=B
+    DAXCH=2
     PORT=64003
     CAT_PORT=:4534
     STATION=${1^^}
     RADIO=192.168.42.165
 elif [ ${1^^} == "RDX6600" ] ; then
+    SLICE=B
+    DAXCH=2
     PORT=64004
     CAT_PORT=:4535
     STATION=${1^^}
@@ -74,10 +78,11 @@ EOF
 chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
-tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source $STATION.rx -sink $STATION.tx"
-tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
-tmux new-window -d -n "${STATION^^}-TOOL" $TEMP_SCRIPT
+tmux new-session -s "${STATION^^}-FL" -d -n "${STATION^^}-FL-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
+                    -radio $RADIO -source $STATION.rx -sink $STATION.tx -slice $SLICE -daxch $DAXCH"
+tmux new-window -d -n "${STATION^^}-FL-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
+                    -slice $SLICE"
+tmux new-window -d -n "${STATION^^}-FL-TOOL" $TEMP_SCRIPT
 
 # Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
 # Wait for the pid file to be created.

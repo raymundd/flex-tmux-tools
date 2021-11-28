@@ -32,11 +32,15 @@ fi
 
 #Some example configs
 if [ ${1^^} == "RDX6500" ]; then
+    SLICE=A
+    DAXCH=1
     PORT=64001
     CAT_PORT=:4532
     STATION=${1^^}
     RADIO=192.168.42.165
 elif [ ${1^^} == "RDX6600" ] ; then
+    SLICE=A
+    DAXCH=1
     PORT=64002
     CAT_PORT=:4533
     STATION=${1^^}
@@ -50,7 +54,7 @@ fi
 chmod +x $DAX_DIR/$DAX_PROG
 chmod +x $DAX_DIR/$CAT_PROG
 
-if [ $(tmux ls | grep -c "${STATION^^}") -gt 0 ]; then
+if [ $(tmux ls | grep -c "${STATION^^}-WSJTX") -gt 0 ]; then
     echo "Session may already be running - abandoning run."
     tmux ls
     exit
@@ -74,10 +78,11 @@ EOF
 chmod +x $TEMP_SCRIPT
 
 # Start tmux, nDAX, nCAT and WSJT-X
-tmux new-session -s ${STATION^^} -d -n "${STATION^^}-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
-                    -radio $RADIO -source $STATION.rx -sink $STATION.tx"
-tmux new-window -d -n "${STATION^^}-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO"
-tmux new-window -d -n "${STATION^^}-WSJTX" $TEMP_SCRIPT
+tmux new-session -s "${STATION^^}-WSJTX" -d -n "${STATION^^}-WSJTX-DAX" "$DAX_DIR/$DAX_PROG -station $STATION -udp-port $PORT \
+                    -radio $RADIO -source $STATION.rx -sink $STATION.tx -slice $SLICE -daxch =$DAXCH"
+tmux new-window -d -n "${STATION^^}-WSJTX-CAT" "$DAX_DIR/$CAT_PROG -station $STATION -listen $CAT_PORT -radio $RADIO \
+                    -slice $SLICE"
+tmux new-window -d -n "${STATION^^}-WSJTX-TOOL" $TEMP_SCRIPT
 
 # Lets remember the pid of this tmux session so that we can find the associated instance of WSJTX.exe that was launched.
 # Wait for the pid file to be created.
